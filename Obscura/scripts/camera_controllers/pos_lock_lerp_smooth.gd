@@ -1,9 +1,9 @@
-class_name PositionLock
+class_name PositionLockLerpSmoothing
 extends CameraControllerBase
 
 @export var cross_size:float = 5.0
-@export var follow_speed:float = 5.0
-@export var catchup_speed:float = 4.0
+@export var follow_speed:float = 10.0
+@export var catchup_speed:float = 6.0
 @export var leash_distance:float = 10.0
 
 func _ready() -> void:
@@ -17,10 +17,31 @@ func _process(delta: float) -> void:
 	
 	if draw_camera_logic:
 		draw_logic()
-		
-	
-	global_position = target.global_position
-	
+	var tpos = target.global_position
+	var cpos = global_position
+	var distance_vector = tpos - cpos
+	var distance = distance_vector.length()
+	if distance > leash_distance and target.velocity.length() > 0.1:
+		global_position = global_position.lerp(tpos, min(1.0, follow_speed * delta / distance))
+	elif distance > leash_distance and target.velocity.length() < 0.1:
+		global_position = global_position.lerp(tpos, min(1.0, catchup_speed * delta / distance))
+	# Boundary checks for box constraints
+	# Left
+	var diff_left = (tpos.x - target.WIDTH / 2.0) - (cpos.x - leash_distance / 2.0)
+	if diff_left < 0:
+		global_position.x += diff_left
+	# Right
+	var diff_right = (tpos.x + target.WIDTH / 2.0) - (cpos.x + leash_distance / 2.0)
+	if diff_right > 0:
+		global_position.x += diff_right
+	# Top
+	var diff_top = (tpos.z - target.HEIGHT / 2.0) - (cpos.z - leash_distance / 2.0)
+	if diff_top < 0:
+		global_position.z += diff_top
+	# Bottom
+	var diff_bottom = (tpos.z + target.HEIGHT / 2.0) - (cpos.z + leash_distance / 2.0)
+	if diff_bottom > 0:
+		global_position.z += diff_bottom
 	super(delta)
 
 

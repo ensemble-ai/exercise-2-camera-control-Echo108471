@@ -5,34 +5,60 @@ extends CameraControllerBase
 @export var bottom_right: Vector2
 @export var autoscroll_speed: Vector3
 
+var top_left_process: Vector2
+var bottom_right_process: Vector2
+
 func _ready() -> void:
 	super()
 	position = target.position
+	top_left_process = top_left
+	bottom_right_process = bottom_right
 
 
 
 func _process(delta: float) -> void:
 	if !current:
 		return
-	var scroll_offset = autoscroll_speed * delta
-	top_left += Vector2(scroll_offset.x, scroll_offset.z)
-	bottom_right += Vector2(scroll_offset.x, scroll_offset.z)
-	
-	global_position.x = (top_left.x + bottom_right.x) / 2
-	global_position.z = (top_left.y + bottom_right.y) / 2
-	global_position.y = target.global_position.y
-	
-	var player_left_edge = target.global_position.x - target.WIDTH / 2.0
-	var frame_left_edge = top_left.x
-	if player_left_edge < frame_left_edge:
-		target.global_position.x += frame_left_edge - player_left_edge
 		
 	if draw_camera_logic:
-		draw_frame_box()
+		draw_logic()
+	
+	var scroll_offset = autoscroll_speed * delta
+	top_left_process += Vector2(scroll_offset.x, scroll_offset.y)
+	bottom_right_process += Vector2(scroll_offset.x, scroll_offset.y)
+	
+	global_position.x = (top_left_process.x + bottom_right_process.x) / 2
+	global_position.z = (top_left_process.y + bottom_right_process.y) / 2
+	global_position.y = target.global_position.y
+	
+	# Left
+	var player_left_edge = target.global_position.x - target.WIDTH / 2.0
+	var frame_left_edge = top_left_process.x
+	if player_left_edge < frame_left_edge:
+		target.global_position.x += frame_left_edge - player_left_edge
+	
+	# Bottom
+	var player_bottom_edge = target.global_position.z + target.HEIGHT / 2.0
+	var frame_bottom_edge = bottom_right_process.y
+	if player_bottom_edge > frame_bottom_edge:
+		target.global_position.z += frame_bottom_edge - player_bottom_edge
+		
+	# Top
+	var player_top_edge = target.global_position.z - target.HEIGHT / 2.0
+	var frame_top_edge = top_left_process.y
+	if player_top_edge < frame_top_edge:
+		target.global_position.z += frame_top_edge - player_top_edge
+		
+	# Right 
+	var player_right_edge = target.global_position.x + target.WIDTH / 2.0
+	var frame_right_edge = bottom_right_process.x
+	if player_right_edge > frame_right_edge:
+		target.global_position.x += frame_right_edge - player_right_edge
+	
 	super(delta)
 	
 	
-func draw_frame_box() -> void:
+func draw_logic() -> void:
 	var mesh_instance := MeshInstance3D.new()
 	var immediate_mesh := ImmediateMesh.new()
 	var material := ORMMaterial3D.new()
