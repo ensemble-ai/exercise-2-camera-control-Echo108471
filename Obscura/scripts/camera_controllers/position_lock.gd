@@ -2,9 +2,7 @@ class_name PositionLock
 extends CameraControllerBase
 
 @export var cross_size:float = 5.0
-@export var follow_speed:float = 5.0
-@export var catchup_speed:float = 4.0
-@export var leash_distance:float = 10.0
+
 
 func _ready() -> void:
 	super()

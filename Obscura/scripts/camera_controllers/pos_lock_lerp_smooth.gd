@@ -22,9 +22,9 @@ func _process(delta: float) -> void:
 	var distance_vector = tpos - cpos
 	var distance = distance_vector.length()
 	if distance > leash_distance and target.velocity.length() > 0.1:
-		global_position = global_position.lerp(tpos, min(1.0, follow_speed * delta / distance))
+		global_position = global_position.lerp(tpos, follow_speed * delta / distance)
 	elif distance > leash_distance and target.velocity.length() < 0.1:
-		global_position = global_position.lerp(tpos, min(1.0, catchup_speed * delta / distance))
+		global_position = global_position.lerp(tpos, catchup_speed * delta / distance)
 	# Boundary checks for box constraints
 	# Left
 	var diff_left = (tpos.x - target.WIDTH / 2.0) - (cpos.x - leash_distance / 2.0)
