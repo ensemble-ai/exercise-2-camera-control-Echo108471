@@ -10,6 +10,7 @@ extends CameraControllerBase
 var last_input_direction: Vector3 = Vector3.ZERO
 var last_move_time: float = 0.0
 
+
 func _ready() -> void:
 	super()
 	position = target.position
@@ -25,11 +26,17 @@ func _process(delta: float) -> void:
 	var tpos = target.global_position
 	var cpos = global_position
 	var input_direction = get_input_direction()
+	var distance_to_player = cpos.distance_to(tpos)
+	print("Distance to player: ", distance_to_player)
 	if input_direction != Vector3.ZERO:
 		last_input_direction = input_direction.normalized()
 		last_move_time = Time.get_ticks_msec() / 1000.0
 		var target_camera_position = tpos + last_input_direction * leash_distance
-		global_position = global_position.lerp(target_camera_position, lead_speed * delta)
+		if (Input.is_action_pressed("ui_accept")):
+			global_position = tpos + last_input_direction * pow(leash_distance, 0.5)
+		else:
+			global_position = global_position.lerp(target_camera_position, lead_speed * delta)
+		
 	else:
 		var time_since_last_move = (Time.get_ticks_msec() / 1000.0) - last_move_time
 		if time_since_last_move >= catchup_delay_duration:
