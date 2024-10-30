@@ -13,7 +13,7 @@ const HYPER_SPEED = 300
 
 var direction:Vector3
 
-func _physics_process(_delta):
+func _process(_delta):
 	
 	var speed = BASE_SPEED
 	$ParticleTrail.visible = false 
