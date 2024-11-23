@@ -60,7 +60,9 @@ ___
 
 ___
 #### Justification ##### 
-The implementation is perfect. The control works well, and the cross line looks great.
+The vessel stay in the center on the screen when using the position lock camera, 
+with an optional crosshair overlay that can be toggled on or off to precisely 
+mark the center of the screen.
 
 ___
 ### Stage 2 ###
@@ -73,8 +75,11 @@ ___
 
 ___
 #### Justification ##### 
-The implementation is perfect. The camera scrolls smoothly, the vessel is pushed 
-when it touches the left side of the box, and the export fields meet all requirements.
+The autoscroll camera box is proportionally designed, with boundaries that can 
+be successfully toggled as needed. The vessel is constrained within the 
+boundaries of the autoscroll camera box, remaining precisely at the edges when 
+attempting to move beyond the defined area. The camera scrolls to the right at 
+a constant speed, creating the effect of a stationary target within the box. 
 
 ___
 ### Stage 3 ###
@@ -87,9 +92,13 @@ ___
 
 ___
 #### Justification ##### 
-I love the overall control feelling. The implementation is very smooth, and the 
-arguments are adjusted perfectly. All code, including the export fields, fully 
-meets the requirements.
+I love the overall control feelling. This stage successfully fulfills all 
+requirements. When stationary, the vessel stay in the center on the screen using 
+the position lock functionality. During movement, the camera initially lags 
+behind the vessel at a slower speed, matches the vessel's speed once 
+it exceeds a defined leash distance, and smoothly catches up when the vessel 
+stops. Additionally, a crosshair can be toggled on or off to accurately mark 
+bthe center of the camera.
 
 ___
 ### Stage 4 ###
@@ -102,55 +111,70 @@ ___
 
 ___
 #### Justification ##### 
-Stage 4 is executed very smoothly and perfectly meets all the requirements.
-Your code provides a well-balanced, responsive, and smooth camera system 
-that aligns with the requirements of the assignment. It gives me an immersive 
-camera that feels natural . Each parameter is carefully chosen to create a 
-balance between responsiveness, smoothness, and player control.
+This stage also meets all requirements. While the vessel is in motion, the 
+camera moves ahead of the vessel in the direction of its velocity, initially 
+at a faster speed and then matching the vessel's speed once it surpasses a 
+defined leash distance. When the vessel stops, the camera pauses for a specified 
+delay before smoothly recentering on the vessel. Additionally, a crosshair can 
+be toggled on or off to precisely indicate the camera's center.
 
 ___
 ### Stage 5 ###
 
-- [x] Perfect
-- [ ] Great
+- [ ] Perfect
+- [X] Great
 - [ ] Good
 - [ ] Satisfactory
 - [ ] Unsatisfactory
 
 ___
 #### Justification ##### 
-Good implementation. All 4 way can being speeding up as required. But your 
-controller doesn't draw the push zone border box when draw_camera_logic is true.
+This stage successfully fulfills some requirements. The vessel is restricted 
+within the boundaries of the outer pushbox, and the camera moves at the vessel's 
+speed in the direction of the wall being pushed, including scenarios where two 
+walls are pushed simultaneously. When the vessel crosses an inner speedup bound, 
+the camera appropriately adjusts its speed to the push ratio multiplied by the 
+vessel's speed in the direction of the crossed boundary. Additionally, 
+the camera remains stationary when the vessel is fully contained within the 
+speedup zone. The proportions of both the outer pushbox and speedup box are 
+appropriately configured and can be toggled on or off as needed.
+
+However, you don't have the inner pushbox. And when the vessel is positioned 
+between the speedup bound and the outer pushbox boundary, the camera incorrectly 
+moves perpendicular to the wall it is near. When the vessel is near the left 
+outer boundaries and moves vertically without being in a corner, the camera also 
+moves vertically, which is incorrect.
+
+And the pushbox set by you may be too large. The vessel can go outside the screen.
 ___
 # Code Style #
 
 
-### Description ###
-Overall you have good comments. 
-
-
 #### Style Guide Infractions ####
-
-You can reduce some Unnecessary Debug Statements like this: 
-https://github.com/ensemble-ai/exercise-2-camera-control-Echo108471/blob/ce19d163dde8527a476c607345e66379c35fb4c3/Obscura/scripts/camera_controllers/lerp_smooth_target_focus.gd#L30
-which can influence user experience.
+Some inconsistent line spaces within functions: [two lines] https://github.com/ensemble-ai/exercise-2-camera-control-Echo108471/blob/799d879f1b516ec71c5e024fa8921208478b2e50/Obscura/scripts/camera_controllers/position_lock.gd#L18
+And sometimes you don't have line space between two functions. https://github.com/ensemble-ai/exercise-2-camera-control-Echo108471/blob/799d879f1b516ec71c5e024fa8921208478b2e50/Obscura/scripts/camera_controllers/four_way_push_zone.gd#L18
+And maybe you can write more comment for four_way_push_zone.gd.
 
 #### Style Guide Exemplars ####
 All comments are on their own separate line of code.
 Your namings of conventions are perfect in this assignment, and we got the file
 name "lerp_position_lock.gd", which follows the GDScript Style Guide.
-
+Uniform use of indentation.
 ___
 
-# Best Practices #
-You follow the the style guide of the GDScript very well. Logical flow makes your
-code straightforward to understand when reading from top to bottom.
 
 ## Best Practices Review ##
-But in some file your could write more comment like lerp_smooth_target_focus.
+
 
 #### Best Practices Infractions ####
-Honestly, everything is inside of Code Style.
 
+Maybe you can reduce some Unnecessary Debug Statements like this: 
+https://github.com/ensemble-ai/exercise-2-camera-control-Echo108471/blob/ce19d163dde8527a476c607345e66379c35fb4c3/Obscura/scripts/camera_controllers/lerp_smooth_target_focus.gd#L30
+which can influence user experience.
+And also add some comments for position_lock.gd. I got confused how your draw_logic
+function works.
 #### Best Practices Exemplars ####
-* Good Code Order in pos_lock_lerp_smooth.gd, for me your code order is pretty. And it meet the requirement described in the style guide of the GDScript.
+* Good Code Order in pos_lock_lerp_smooth.gd, for me your code order is pretty 
+good. And it meet the requirement described in the style guide of the GDScript.
+[good exmaple of proper variable naming] https://github.com/ensemble-ai/exercise-2-camera-control-Echo108471/blob/799d879f1b516ec71c5e024fa8921208478b2e50/Obscura/scripts/camera_controllers/pos_lock_lerp_smooth.gd#L28
+[Sufficient code comment] https://github.com/ensemble-ai/exercise-2-camera-control-Echo108471/blob/799d879f1b516ec71c5e024fa8921208478b2e50/Obscura/scripts/camera_controllers/pos_lock_lerp_smooth.gd#L28
